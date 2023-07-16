@@ -5,7 +5,8 @@
 ### Usage
 1. Play a song from YouTube in Chrome / Brave or Edge. The Script will look for "chrome" but seen as all three of these are based off it, it should work.
 2. Type `/ytnp` into your desired channel
-3. Output:   
+
+### Output:   
 <img width="914" alt="image" src="https://github.com/Moodkiller/YouTube-NowPlaying/assets/11341653/131d8864-2ad0-4c71-be54-d3142d929ee8">   
 
 Note: the two lines above can be disabled, they are just part of the debugging.
