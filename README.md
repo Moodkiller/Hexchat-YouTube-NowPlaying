@@ -1,7 +1,8 @@
 ### Setup 
 1. Copy / download `youtube_nowplaying.py` to your Hexchat addons directory: `%appdata%\HexChat\addons`
-2. In Hexchat, load the script with `/LOAD youtube_nowplaying.py`
-3. Install [PyGetWindow](https://pypi.org/project/PyGetWindow/)
+2. Install [PyGetWindow](https://pypi.org/project/PyGetWindow/)
+3. In Hexchat, load the script with `/LOAD youtube_nowplaying.py`
+   
 
 ### Usage
 1. Play a song from YouTube in Chrome.
