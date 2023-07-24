@@ -7,7 +7,7 @@ from datetime import datetime
 
 __module_name__ = "YouTube Now Playing"
 __module_author__ = "Moodkiller"
-__module_version__ = "1.0"
+__module_version__ = "1.1"
 __module_description__ = "Displays the currently playing YouTube video information"
 
 # Your YouTube Data API key
@@ -15,16 +15,18 @@ API_KEY = "PLACE_YOUR_API_KEY_HERE"
 
 def get_youtube_info():
     try:
-        # Get all Chrome windows
-        chrome_windows = gw.getWindowsWithTitle('Google Chrome')
+        # Get all open windows
+        all_windows = gw.getWindowsWithTitle('')
 
         # Check if any window title contains YouTube video information
-        for window in chrome_windows:
+        for window in all_windows:
             window_title = window.title
             hexchat.prnt(f"Detected Window Title: {window_title}")
-            match = re.search(r"^(.*?)\s-\sYouTube\s-\sGoogle Chrome$", window_title)
+            match = re.search(r"^(.*?)\s-\sYouTube\s-\s(Google Chrome|Brave|Mozilla Firefox|Microsoft Edge)$", window_title)
             if match:
-                hexchat.prnt(f"Matching YouTube Window Title: {match.group(1)}")
+                browser_name = match.group(2)
+		# Uncomment the below to see the matching windows for troubleshooting
+                # hexchat.prnt(f"Matching YouTube Window Title in {browser_name}: {match.group(1)}")
                 title = match.group(1)
                 video_id = get_video_id(title)
                 if video_id:
@@ -35,7 +37,7 @@ def get_youtube_info():
                         upload_ago = calculate_time_difference(upload_date)
                         channel = video_info["channelTitle"]
                         likes = format_views(video_info["likeCount"])
-                        message = f"is now playing: \x02\x034{title}\x03\x02 • \x0310Channel:\x03 {channel} • \x0310Views:\x03 {views} • \x0310Likes:\x03 {likes} • \x0310Uploaded:\x03 {upload_ago}"
+                        message = f"me is now playing \x034{title}\x03\x0f	from \x034{channel}\x03 (\x0310Views:\x03 {views} • \x0310Likes:\x03 {likes} • \x0310Uploaded:\x03 {upload_ago}\x03\x0f) in {browser_name}"
                         send_message_to_channel(message)
                         return
 
