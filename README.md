@@ -9,7 +9,8 @@
 2. Type `/ytnp` into your desired channel
 
 ### Output:   
-<img width="873" alt="image" src="https://github.com/Moodkiller/YouTube-NowPlaying/assets/11341653/1c06045a-4e70-45d0-803f-6ac2a5e3ac36">
+<img width="1743" alt="image" src="https://github.com/Moodkiller/YouTube-NowPlaying/assets/11341653/a8c04bda-a1b1-44e0-b565-ef78c405df02">
+
 
 Note: the two lines above can be disabled, they are just part of the debugging.
 
@@ -18,3 +19,4 @@ Note: the two lines above can be disabled, they are just part of the debugging.
 * Will display the current active playing song (i.e you can have mulitple YouTube tabs open but the script will only use the active tab as its source)
 * Debugging: Will display any errors if the API call failed (i.e in the case of reaching a limit)
 * If API reaches its limit / fails, script will fall back to just showing the title pulled from the active tab in the browser
+
