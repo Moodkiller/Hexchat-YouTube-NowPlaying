@@ -37,7 +37,7 @@ def get_youtube_info():
                         upload_ago = calculate_time_difference(upload_date)
                         channel = video_info["channelTitle"]
                         likes = format_views(video_info["likeCount"])
-                        message = f"me is now playing \x034{title}\x03\x0f	from \x034{channel}\x03 (\x0310Views:\x03 {views} • \x0310Likes:\x03 {likes} • \x0310Uploaded:\x03 {upload_ago}\x03\x0f) in {browser_name}"
+                        message = f"is now playing \x034{title}\x03\x0f	from \x034{channel}\x03 (\x0310Views:\x03 {views} • \x0310Likes:\x03 {likes} • \x0310Uploaded:\x03 {upload_ago}\x03\x0f) in {browser_name}"
                         send_message_to_channel(message)
                         return
 
