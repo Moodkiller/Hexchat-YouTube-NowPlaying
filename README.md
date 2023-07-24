@@ -5,11 +5,11 @@
    
 
 ### Usage
-1. Play a song from YouTube in Chrome.
+1. Play a song from YouTube in Chrome, Brave, Edge or Firefox.
 2. Type `/ytnp` into your desired channel
 
 ### Output:   
-<img width="914" alt="image" src="https://github.com/Moodkiller/YouTube-NowPlaying/assets/11341653/131d8864-2ad0-4c71-be54-d3142d929ee8">   
+<img width="873" alt="image" src="https://github.com/Moodkiller/YouTube-NowPlaying/assets/11341653/1c06045a-4e70-45d0-803f-6ac2a5e3ac36">
 
 Note: the two lines above can be disabled, they are just part of the debugging.
 
