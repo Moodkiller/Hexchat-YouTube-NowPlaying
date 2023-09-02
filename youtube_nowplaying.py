@@ -7,48 +7,50 @@ from datetime import datetime
 
 __module_name__ = "YouTube Now Playing"
 __module_author__ = "Moodkiller"
-__module_version__ = "1.1"
+__module_version__ = "1.1-dev"
 __module_description__ = "Displays the currently playing YouTube video information"
 
 # Your YouTube Data API key
-API_KEY = "PLACE_YOUR_API_KEY_HERE"
+API_KEY = "Your_API_KEY"
 
 def get_youtube_info():
+    title = None  # Initialize title with a default value
     try:
-        # Get all open windows
-        all_windows = gw.getWindowsWithTitle('')
+        # List of browser names
+        browser_names = ['Google Chrome', 'Brave', 'Mozilla Firefox', 'Microsoft Edge']
+
+        # Get windows only from specified browsers and extract their titles
+        browser_windows = [window.title for window in gw.getWindowsWithTitle('') if window.title.split(' - ')[-1] in browser_names]
 
         # Check if any window title contains YouTube video information
-        for window in all_windows:
-            window_title = window.title
-            hexchat.prnt(f"Detected Window Title: {window_title}")
-            match = re.search(r"^(.*?)\s-\sYouTube\s-\s(Google Chrome|Brave|Mozilla Firefox|Microsoft Edge)$", window_title)
+        for window_title in browser_windows:
+            match = re.search(r"^(.*?)\s-\sYouTube\s-\s(.+)$", window_title)
             if match:
                 browser_name = match.group(2)
-		# Uncomment the below to see the matching windows for troubleshooting
-                # hexchat.prnt(f"Matching YouTube Window Title in {browser_name}: {match.group(1)}")
+                hexchat.prnt(f"Matching YouTube Window Title in {browser_name}: {match.group(1)}")
                 title = match.group(1)
                 video_id = get_video_id(title)
                 if video_id:
                     video_info = get_video_details(video_id)
-                    if video_info:
+                    if video_info:  # Check if 'title' exists
                         views = format_views(video_info["viewCount"])
                         upload_date = video_info["publishedAt"]
                         upload_ago = calculate_time_difference(upload_date)
                         channel = video_info["channelTitle"]
-                        likes = format_views(video_info["likeCount"])
-                        message = f"is now playing \x034{title}\x03\x0f	from \x034{channel}\x03 (\x0310Views:\x03 {views} • \x0310Likes:\x03 {likes} • \x0310Uploaded:\x03 {upload_ago}\x03\x0f) in {browser_name}"
+                        likes = format_views(video_info.get("likeCount", 0))
+                        message = f"is now playing \x034{title}\x03\x0f from \x034{channel}\x03 (\x0310Views:\x03 {views} • \x0310Likes:\x03 {likes} • \x0310Uploaded:\x03 {upload_ago}\x03\x0f) in {browser_name}"
                         send_message_to_channel(message)
                         return
 
-        # No matching window title found
-        #title = get_current_song_title()
         if title:
             message = f"me is now playing: \x02\x034{title}\x03\x02"
             send_message_to_channel(message)
+        else:
+            hexchat.prnt("No YouTube window found in supported browsers.")
 
     except Exception as e:
         hexchat.prnt(f"Error retrieving YouTube video information: {str(e)}")
+
 
 
 def get_video_id(title):
@@ -149,6 +151,6 @@ def youtube_now_playing(word, word_eol, userdata):
 
 
 # Register the command /ytnp to retrieve YouTube video information
-hexchat.hook_command('ytnp', youtube_now_playing, help="/ytnp - Get the currently playing YouTube video information")
+hexchat.hook_command('ytnp-dev', youtube_now_playing, help="/ytnp-dev - Get the currently playing YouTube video information")
 
 hexchat.prnt("YouTube Now Playing plugin loaded")
