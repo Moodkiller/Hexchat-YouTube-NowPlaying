@@ -7,11 +7,11 @@ from datetime import datetime
 
 __module_name__ = "YouTube Now Playing"
 __module_author__ = "Moodkiller"
-__module_version__ = "1.1-dev"
+__module_version__ = "1.2"
 __module_description__ = "Displays the currently playing YouTube video information"
 
 # Your YouTube Data API key
-API_KEY = "Your_API_KEY"
+API_KEY = "PLACE_YOUR_API_KEY_HERE"
 
 def get_youtube_info():
     title = None  # Initialize title with a default value
@@ -151,6 +151,6 @@ def youtube_now_playing(word, word_eol, userdata):
 
 
 # Register the command /ytnp to retrieve YouTube video information
-hexchat.hook_command('ytnp-dev', youtube_now_playing, help="/ytnp-dev - Get the currently playing YouTube video information")
+hexchat.hook_command('ytnp', youtube_now_playing, help="/ytnp - Get the currently playing YouTube video information")
 
 hexchat.prnt("YouTube Now Playing plugin loaded")
