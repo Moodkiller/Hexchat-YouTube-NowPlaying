@@ -7,50 +7,48 @@ from datetime import datetime
 
 __module_name__ = "YouTube Now Playing"
 __module_author__ = "Moodkiller"
-__module_version__ = "1.2"
+__module_version__ = "1.1"
 __module_description__ = "Displays the currently playing YouTube video information"
 
 # Your YouTube Data API key
 API_KEY = "PLACE_YOUR_API_KEY_HERE"
 
 def get_youtube_info():
-    title = None  # Initialize title with a default value
     try:
-        # List of browser names
-        browser_names = ['Google Chrome', 'Brave', 'Mozilla Firefox', 'Microsoft Edge']
-
-        # Get windows only from specified browsers and extract their titles
-        browser_windows = [window.title for window in gw.getWindowsWithTitle('') if window.title.split(' - ')[-1] in browser_names]
+        # Get all open windows
+        all_windows = gw.getWindowsWithTitle('')
 
         # Check if any window title contains YouTube video information
-        for window_title in browser_windows:
-            match = re.search(r"^(.*?)\s-\sYouTube\s-\s(.+)$", window_title)
+        for window in all_windows:
+            window_title = window.title
+            hexchat.prnt(f"Detected Window Title: {window_title}")
+            match = re.search(r"^(.*?)\s-\sYouTube\s-\s(Google Chrome|Brave|Mozilla Firefox|Microsoft Edge)$", window_title)
             if match:
                 browser_name = match.group(2)
-                hexchat.prnt(f"Matching YouTube Window Title in {browser_name}: {match.group(1)}")
+		# Uncomment the below to see the matching windows for troubleshooting
+                # hexchat.prnt(f"Matching YouTube Window Title in {browser_name}: {match.group(1)}")
                 title = match.group(1)
                 video_id = get_video_id(title)
                 if video_id:
                     video_info = get_video_details(video_id)
-                    if video_info:  # Check if 'title' exists
+                    if video_info:
                         views = format_views(video_info["viewCount"])
                         upload_date = video_info["publishedAt"]
                         upload_ago = calculate_time_difference(upload_date)
                         channel = video_info["channelTitle"]
-                        likes = format_views(video_info.get("likeCount", 0))
-                        message = f"is now playing \x034{title}\x03\x0f from \x034{channel}\x03 (\x0310Views:\x03 {views} • \x0310Likes:\x03 {likes} • \x0310Uploaded:\x03 {upload_ago}\x03\x0f) in {browser_name}"
+                        likes = format_views(video_info["likeCount"])
+                        message = f"is now playing \x034{title}\x03\x0f	from \x034{channel}\x03 (\x0310Views:\x03 {views} • \x0310Likes:\x03 {likes} • \x0310Uploaded:\x03 {upload_ago}\x03\x0f) in {browser_name}"
                         send_message_to_channel(message)
                         return
 
+        # No matching window title found
+        #title = get_current_song_title()
         if title:
             message = f"me is now playing: \x02\x034{title}\x03\x02"
             send_message_to_channel(message)
-        else:
-            hexchat.prnt("No YouTube window found in supported browsers.")
 
     except Exception as e:
         hexchat.prnt(f"Error retrieving YouTube video information: {str(e)}")
-
 
 
 def get_video_id(title):
@@ -125,15 +123,23 @@ def calculate_time_difference(upload_date):
         upload_datetime = datetime.strptime(upload_date, "%Y-%m-%dT%H:%M:%SZ")
         time_difference = now - upload_datetime
 
-        years = time_difference.days // 365
-        months = time_difference.days % 365 // 30
+        days = time_difference.days
+        weeks = days // 7
 
-        if years > 0:
-            return f"{years} year{'s' if years > 1 else ''} ago"
-        elif months > 0:
-            return f"{months} month{'s' if months > 1 else ''} ago"
+        if days < 1:
+            return "Today"
+        elif days < 7:
+            return f"{days} day{'s' if days > 1 else ''} ago"
+        elif weeks < 4:
+            return f"{weeks} week{'s' if weeks > 1 else ''} ago"
         else:
-            return "Less than a month ago"
+            years = days // 365
+            if years > 0:
+                return f"{years} year{'s' if years > 1 else ''} ago"
+            else:
+                months = days // 30
+                return f"{months} month{'s' if months > 1 else ''} ago"
+
     except Exception as e:
         hexchat.prnt(f"Error calculating time difference: {str(e)}")
 
